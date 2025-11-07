@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import Map from './components/Map/Map';
 import Header from './components/Header/Header';
 import Dashboard from './components/Dashboard/Dashboard';
 import MapView from './components/Map/MapView';
@@ -38,9 +37,6 @@ function App() {
     <div className="App">
       <Header />
 
-
-      <Map />
-      
       <div className="main-content">
         <aside className="sidebar">
           <Dashboard data={data} />
