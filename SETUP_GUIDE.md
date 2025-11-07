@@ -48,7 +48,7 @@ copy .env.example .env    # Windows
 # or
 cp .env.example .env      # Mac/Linux
 ```
-
+a
 The default configuration should work fine.
 
 ### Step 3: Start the Servers
