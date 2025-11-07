@@ -2,33 +2,93 @@
   width: 100%;
   height: 100%;
   position: relative;
+  background: #f5f5f5;
 }
 
-.leaflet-container {
+.map-placeholder {
+  padding: 20px;
   height: 100%;
-  width: 100%;
-  z-index: 1;
+  overflow-y: auto;
 }
 
-.popup-content {
-  min-width: 200px;
+.map-placeholder h2 {
+  text-align: center;
+  color: #666;
+  margin-bottom: 10px;
 }
 
-.popup-content h3 {
-  margin: 0 0 10px 0;
-  font-size: 16px;
+.map-placeholder > p {
+  text-align: center;
+  color: #999;
+  margin-bottom: 30px;
+}
+
+.map-section {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.map-section h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
   color: #333;
 }
 
-.popup-content p {
-  margin: 4px 0;
-  font-size: 14px;
+.map-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  margin-bottom: 8px;
 }
 
-.popup-timestamp {
-  font-size: 12px;
-  color: #666;
-  margin-top: 8px;
+.map-item strong {
+  min-width: 150px;
+}
+
+.map-item span {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.severity {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.severity-high {
+  background: #ff4444;
+  color: white;
+}
+
+.severity-medium {
+  background: #ffaa00;
+  color: white;
+}
+
+.severity-low {
+  background: #44ff44;
+  color: #333;
+}
+
+.status {
+  font-weight: bold;
+}
+
+.status-moderate {
+  background: #ffff00;
+  color: #333;
+}
+
+.status-unhealthy {
+  background: #ff7e00;
+  color: white;
 }
 
 .map-legend {

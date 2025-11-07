@@ -32,7 +32,7 @@ function LayerControl({ layers, onToggle }) {
             <span className="toggle-slider"></span>
             <span className="toggle-text">
               <span className="toggle-icon">💨</span>
-              Air Quality Sensors
+              Air Quality
             </span>
           </label>
         </div>
@@ -48,21 +48,6 @@ function LayerControl({ layers, onToggle }) {
             <span className="toggle-text">
               <span className="toggle-icon">☁️</span>
               Smoke Forecast
-            </span>
-          </label>
-        </div>
-
-        <div className="layer-toggle-item">
-          <label className="toggle-label">
-            <input
-              type="checkbox"
-              checked={layers.windDirection}
-              onChange={() => onToggle('windDirection')}
-            />
-            <span className="toggle-slider"></span>
-            <span className="toggle-text">
-              <span className="toggle-icon">🌬️</span>
-              Wind Direction
             </span>
           </label>
         </div>
