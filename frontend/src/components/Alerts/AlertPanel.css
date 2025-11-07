@@ -1,0 +1,203 @@
+.alert-panel {
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.panel-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #333;
+}
+
+.loading-state,
+.no-alerts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  color: #666;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ff6b6b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 12px;
+}
+
+.alert-summary {
+  text-align: center;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.summary-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.summary-badge.risk-low {
+  background: #00c853;
+}
+
+.summary-badge.risk-moderate {
+  background: #ffc107;
+  color: #333;
+}
+
+.summary-badge.risk-unhealthy {
+  background: #ff6f00;
+}
+
+.summary-badge.risk-hazardous {
+  background: #d32f2f;
+}
+
+.summary-text {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+.alerts-section,
+.recommendations-section,
+.details-section {
+  margin-bottom: 24px;
+}
+
+.alerts-section h3,
+.recommendations-section h3,
+.details-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.alert-card {
+  padding: 12px;
+  border-left: 4px solid;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  background: #f9f9f9;
+}
+
+.alert-card.severity-danger {
+  border-color: #d32f2f;
+  background: #ffebee;
+}
+
+.alert-card.severity-alert {
+  border-color: #ff6f00;
+  background: #fff3e0;
+}
+
+.alert-card.severity-warning {
+  border-color: #ffc107;
+  background: #fffde7;
+}
+
+.alert-card.severity-info {
+  border-color: #2196f3;
+  background: #e3f2fd;
+}
+
+.alert-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.alert-icon {
+  font-size: 18px;
+}
+
+.alert-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.alert-message {
+  font-size: 13px;
+  color: #555;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.recommendations-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recommendation-item {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.rec-icon {
+  color: #00c853;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.detail-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.detail-label {
+  color: #666;
+}
+
+.detail-value {
+  font-weight: 600;
+  color: #333;
+}
+
+.update-timestamp {
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .alert-panel {
+    padding: 12px;
+  }
+}
+
