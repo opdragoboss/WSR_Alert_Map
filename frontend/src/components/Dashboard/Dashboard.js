@@ -1,11 +1,17 @@
 import React from 'react';
 import './Dashboard.css';
 
-function Dashboard({ data }) {
+function Dashboard({ data, wind }) {
   const fireCount = data.wildfires?.length || 0;
-  const avgAQI = data.airQuality?.length > 0
-    ? Math.round(data.airQuality.reduce((sum, aq) => sum + aq.aqi, 0) / data.airQuality.length)
-    : 0;
+  const validAqiStations = (data.airQuality || []).filter((aq) => typeof aq.aqi === 'number');
+  const avgAQI = validAqiStations.length > 0
+    ? Math.round(validAqiStations.reduce((sum, aq) => sum + aq.aqi, 0) / validAqiStations.length)
+    : '—';
+  const windSpeedDisplay = wind?.speed ?? 'n/a';
+  const windDirectionDisplay = wind?.directionCardinal
+    ? `${wind.directionCardinal}${wind.directionDegrees != null ? ` (${wind.directionDegrees}°)` : ''}`
+    : 'Variable';
+  const affectedAreas = validAqiStations.filter((aq) => aq.aqi > 100).length;
 
   return (
     <div className="dashboard">
@@ -31,8 +37,16 @@ function Dashboard({ data }) {
         <div className="stat-card">
           <div className="stat-icon">⚠️</div>
           <div className="stat-content">
-            <div className="stat-value">{data.airQuality?.filter(aq => aq.aqi > 100).length || 0}</div>
+            <div className="stat-value">{affectedAreas}</div>
             <div className="stat-label">Affected Areas</div>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon">🌬️</div>
+          <div className="stat-content">
+            <div className="stat-value">{windSpeedDisplay}</div>
+            <div className="stat-label">Wind {windDirectionDisplay}</div>
           </div>
         </div>
       </div>

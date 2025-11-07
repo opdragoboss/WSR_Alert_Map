@@ -5,7 +5,7 @@ const airQualityService = require('../services/airQualityService');
  */
 exports.getAirQuality = async (req, res, next) => {
   try {
-    const { lat, lng, radius = 50000, bbox } = req.query;
+    const { lat, lng, radius = 50000, bbox, limit } = req.query;
 
     // Validate input based on search type
     if (bbox) {
@@ -45,7 +45,15 @@ exports.getAirQuality = async (req, res, next) => {
 
     const latNum = parseFloat(lat);
     const lngNum = parseFloat(lng);
-    const radiusNum = parseInt(radius);
+    const radiusNum = parseInt(radius, 10);
+    if (Number.isNaN(radiusNum) || radiusNum <= 0) {
+      return res.status(400).json({
+        error: 'Invalid radius parameter',
+        message: 'Radius must be a positive number (meters)'
+      });
+    }
+    const limitNumRaw = limit != null ? parseInt(limit, 10) : undefined;
+    const limitNum = Number.isNaN(limitNumRaw) || limitNumRaw <= 0 ? undefined : limitNumRaw;
 
     if (isNaN(latNum) || isNaN(lngNum) || latNum < -90 || latNum > 90 || lngNum < -180 || lngNum > 180) {
       return res.status(400).json({
@@ -57,7 +65,8 @@ exports.getAirQuality = async (req, res, next) => {
     const data = await airQualityService.getAirQualityByRadius({
       lat: latNum,
       lng: lngNum,
-      radius: radiusNum
+      radius: radiusNum,
+      limit: limitNum
     });
 
     res.json({

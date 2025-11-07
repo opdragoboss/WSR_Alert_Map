@@ -53,9 +53,21 @@ function Map({ data = {}, layers = {} }) {
         wildfires.map((fire) => (
           <Marker key={fire.id} position={[fire.lat, fire.lng]}>
             <Popup>
-              <strong>{fire.name}</strong>
+              <strong>{fire.name || 'Active Fire'}</strong>
               <br />
-              Severity: {fire.severity}
+              {fire.confidence != null && (
+                <>
+                  Confidence: {fire.confidence}
+                  <br />
+                </>
+              )}
+              {fire.frp != null && (
+                <>
+                  Radiative Power: {fire.frp}
+                  <br />
+                </>
+              )}
+              {fire.acqDate && <span>Detected: {fire.acqDate}</span>}
             </Popup>
           </Marker>
         ))}

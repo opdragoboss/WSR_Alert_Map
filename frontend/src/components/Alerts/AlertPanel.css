@@ -58,12 +58,20 @@
   color: #333;
 }
 
-.summary-badge.risk-unhealthy {
+.summary-badge.risk-high {
   background: #ff6f00;
 }
 
-.summary-badge.risk-hazardous {
+.summary-badge.risk-very-high {
+  background: #d84315;
+}
+
+.summary-badge.risk-extreme {
   background: #d32f2f;
+}
+
+.summary-badge.risk-unknown {
+  background: #607d8b;
 }
 
 .summary-text {

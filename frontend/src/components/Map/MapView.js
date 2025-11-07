@@ -2,11 +2,29 @@ import React from 'react';
 import Map from './Map';
 import './MapView.css';
 
-function MapView({ data, layers }) {
+function MapView({ data, layers, loading, error, wind }) {
+  const windLabel = wind?.directionCardinal
+    ? `${wind.directionCardinal}${wind.directionDegrees != null ? ` (${wind.directionDegrees}°)` : ''}`
+    : 'Variable';
+
   return (
     <div className="map-view">
       <div className="map-canvas">
         <Map data={data} layers={layers} />
+
+        {(loading || error) && (
+          <div className={`map-status ${loading ? 'loading' : 'error'}`}>
+            {loading ? 'Loading live environmental data…' : error}
+          </div>
+        )}
+
+        {wind?.speed && !loading && !error && (
+          <div className="map-callout wind-callout">
+            <div className="callout-label">Surface Wind</div>
+            <div className="callout-value">{wind.speed}</div>
+            <div className="callout-subtext">Direction: {windLabel}</div>
+          </div>
+        )}
       </div>
 
       <div className="map-legend">

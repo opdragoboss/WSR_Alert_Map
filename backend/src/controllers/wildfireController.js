@@ -5,7 +5,7 @@ const wildfireService = require('../services/wildfireService');
  */
 exports.getWildfires = async (req, res, next) => {
   try {
-    const { bbox, days = 1, source } = req.query;
+    const { bbox, days = 1, source, area } = req.query;
 
     // Validate days parameter
     const daysNum = parseInt(days);
@@ -38,7 +38,8 @@ exports.getWildfires = async (req, res, next) => {
     const data = await wildfireService.getActiveWildfires({
       bounds,
       days: daysNum,
-      source
+      source,
+      area
     });
 
     res.json({

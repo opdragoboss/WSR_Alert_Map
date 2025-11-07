@@ -1,95 +1,84 @@
 const axios = require('axios');
 const NodeCache = require('node-cache');
+
 const cache = new NodeCache({ stdTTL: process.env.CACHE_TTL_WILDFIRES || 300 });
 
-/**
- * Wildfire Service
- * Fetches active wildfire data from NASA FIRMS
- * API Documentation: https://firms.modaps.eosdis.nasa.gov/api/
- */
+const FIRMS_BASE_URL = 'https://firms.modaps.eosdis.nasa.gov/api';
+const DEFAULT_FIRMS_DATASET = process.env.NASA_FIRMS_DATASET || 'VIIRS_SNPP_NRT';
+const DEFAULT_FIRMS_AREA = process.env.NASA_FIRMS_AREA || 'USA_contiguous_and_Hawaii';
+const DEFAULT_USER_AGENT = process.env.FIRMS_USER_AGENT || 'WSR Alert Map (team@wsr-alert-map.local)';
 
-/**
- * Get active wildfires
- * @param {Object} options - Query options
- * @param {Object} options.bounds - Geographic bounds {minLng, minLat, maxLng, maxLat}
- * @param {number} options.days - Days to look back (1-10)
- * @param {string} options.source - Data source (VIIRS_SNPP_NRT, MODIS_NRT)
- * @returns {Promise<Array>} Array of wildfire data points
- */
-exports.getActiveWildfires = async ({ bounds, days = 1, source }) => {
+const withinBounds = (point, bounds) => {
+  if (!bounds) return true;
+  const { lat, lng } = point;
+  return (
+    lat >= bounds.minLat &&
+    lat <= bounds.maxLat &&
+    lng >= bounds.minLng &&
+    lng <= bounds.maxLng
+  );
+};
+
+const normalizeFireRecord = (record, index) => {
+  if (!record) return null;
+  const lat = Number(record.latitude ?? record.lat ?? record.latitud);
+  const lng = Number(record.longitude ?? record.lon ?? record.longitud);
+  if (Number.isNaN(lat) || Number.isNaN(lng)) return null;
+
+  const confidenceRaw = record.confidence ?? record.confidence_level;
+
+  return {
+    id: record.id || record.fire_id || record.fid || `fire-${index}`,
+    lat,
+    lng,
+    name: record.name || record.location || record.acq_date || `Fire ${index + 1}`,
+    brightness: record.brightness ? Number(record.brightness) : null,
+    confidence: typeof confidenceRaw === 'string' ? confidenceRaw : confidenceRaw != null ? Number(confidenceRaw) : null,
+    frp: record.frp != null ? Number(record.frp) : null,
+    acqDate: record.acq_date || record.acquired || null,
+    acqTime: record.acq_time || null,
+    daynight: record.daynight || null,
+    source: record.satellite || record.source || DEFAULT_FIRMS_DATASET
+  };
+};
+
+exports.getActiveWildfires = async ({ bounds, days = 1, source, area }) => {
   try {
-    const cacheKey = `wildfires_${bounds ? JSON.stringify(bounds) : 'world'}_${days}_${source || 'all'}`;
-    
-    // Check cache first
+    const cacheKey = `wildfires_${bounds ? JSON.stringify(bounds) : 'world'}_${days}_${source || 'all'}_${area || 'default'}`;
     const cached = cache.get(cacheKey);
     if (cached) {
-      console.log('Returning cached wildfire data');
       return cached;
     }
 
-    // TODO: Implement actual NASA FIRMS API call
-    // Example API endpoint:
-    // https://firms.modaps.eosdis.nasa.gov/api/area/csv/${API_KEY}/VIIRS_SNPP_NRT/world/${days}
-    
     const apiKey = process.env.NASA_FIRMS_API_KEY;
-    
-    if (!apiKey || apiKey === 'your_nasa_firms_api_key_here') {
-      console.warn('NASA FIRMS API key not configured, returning mock data');
-      return getMockWildfireData();
+    if (!apiKey) {
+      throw new Error('NASA FIRMS API key not configured');
     }
 
-    // Placeholder for actual API implementation
-    // const response = await axios.get(`https://firms.modaps.eosdis.nasa.gov/api/...`);
-    // const data = parseWildfireData(response.data);
-    
-    const data = getMockWildfireData();
-    
-    // Cache the result
-    cache.set(cacheKey, data);
-    
-    return data;
+    const dataset = source || DEFAULT_FIRMS_DATASET;
+    const targetArea = area || DEFAULT_FIRMS_AREA;
+    const url = `${FIRMS_BASE_URL}/area/json/${apiKey}/${dataset}/${targetArea}/${days}`;
+
+    const response = await axios.get(url, {
+      headers: { 'User-Agent': DEFAULT_USER_AGENT },
+      timeout: Number(process.env.FIRMS_TIMEOUT_MS || 10000)
+    });
+
+    const rows = Array.isArray(response.data?.features)
+      ? response.data.features.map((feature) => feature.attributes || feature.properties)
+      : Array.isArray(response.data)
+        ? response.data
+        : [];
+
+    const normalized = rows
+      .map((record, index) => normalizeFireRecord(record, index))
+      .filter(Boolean)
+      .filter((record) => withinBounds(record, bounds));
+
+    cache.set(cacheKey, normalized);
+    return normalized;
   } catch (error) {
     console.error('Error fetching wildfire data:', error.message);
     throw new Error('Failed to fetch wildfire data');
   }
 };
-
-/**
- * Mock wildfire data for template/testing
- */
-function getMockWildfireData() {
-  return [
-    {
-      id: 'fire_001',
-      latitude: 37.7749,
-      longitude: -122.4194,
-      brightness: 330.5,
-      confidence: 95,
-      frp: 45.2, // Fire Radiative Power
-      timestamp: new Date().toISOString(),
-      source: 'VIIRS_SNPP_NRT'
-    },
-    {
-      id: 'fire_002',
-      latitude: 38.5816,
-      longitude: -121.4944,
-      brightness: 315.8,
-      confidence: 88,
-      frp: 38.7,
-      timestamp: new Date().toISOString(),
-      source: 'MODIS_NRT'
-    }
-  ];
-}
-
-/**
- * Parse CSV data from NASA FIRMS into JSON format
- * @param {string} csvData - Raw CSV data
- * @returns {Array} Parsed wildfire data
- */
-function parseWildfireData(csvData) {
-  // TODO: Implement CSV parsing
-  // Expected CSV columns: latitude,longitude,brightness,scan,track,acq_date,acq_time,satellite,confidence,version,bright_t31,frp,daynight
-  return [];
-}
-

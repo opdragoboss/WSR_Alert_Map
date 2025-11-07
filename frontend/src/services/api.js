@@ -39,7 +39,7 @@ export const fetchAirQuality = async (lat, lng, radius = 50000) => {
     return response.data.data || [];
   } catch (error) {
     console.error('Error fetching air quality:', error);
-    return getMockAirQuality();
+    return getMockAirQuality(lat, lng);
   }
 };
 
@@ -116,8 +116,8 @@ function getMockWildfires() {
   return [
     {
       id: 'fire_001',
-      latitude: 37.7749,
-      longitude: -122.4194,
+      lat: 37.7749,
+      lng: -122.4194,
       brightness: 330.5,
       confidence: 95,
       frp: 45.2,
@@ -125,8 +125,8 @@ function getMockWildfires() {
     },
     {
       id: 'fire_002',
-      latitude: 38.5816,
-      longitude: -121.4944,
+      lat: 38.5816,
+      lng: -121.4944,
       brightness: 315.8,
       confidence: 88,
       frp: 38.7,
@@ -135,13 +135,13 @@ function getMockWildfires() {
   ];
 }
 
-function getMockAirQuality() {
+function getMockAirQuality(lat = 37.7749, lng = -122.4194) {
   return [
     {
       id: 'aq_001',
       location: 'Downtown Station',
-      latitude: 37.7849,
-      longitude: -122.4094,
+      lat: lat + 0.01,
+      lng: lng + 0.01,
       aqi: 85,
       status: 'moderate',
       timestamp: new Date().toISOString()
@@ -149,8 +149,8 @@ function getMockAirQuality() {
     {
       id: 'aq_002',
       location: 'North District',
-      latitude: 37.7549,
-      longitude: -122.4294,
+      lat: lat - 0.02,
+      lng: lng - 0.01,
       aqi: 165,
       status: 'unhealthy',
       timestamp: new Date().toISOString()
@@ -172,12 +172,16 @@ function getMockSmokeForecast() {
 
 function getMockWindData() {
   return {
-    current: {
-      windSpeed: 15,
-      windDirection: 225,
-      windDirectionCardinal: 'SW',
-      timestamp: new Date().toISOString()
-    }
+    speed: '15 mph',
+    speedValue: 15,
+    directionDegrees: 225,
+    directionCardinal: 'SW',
+    gust: '22 mph',
+    gustValue: 22,
+    updatedAt: new Date().toISOString(),
+    office: 'Mock Office',
+    grid: { gridId: 'TEST', gridX: 0, gridY: 0 },
+    forecast: []
   };
 }
 
