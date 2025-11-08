@@ -19,7 +19,7 @@ const DEFAULT_FIRE_DATASET = 'VIIRS_SNPP_NRT';
 
 function App() {
   // App state
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(false);
   const [activeTab, setActiveTab] = useState('map'); // 'map', 'dashboard', 'alerts', 'chatbot'
   const [showLayers, setShowLayers] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
