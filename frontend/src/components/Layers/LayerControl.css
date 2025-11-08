@@ -1,13 +1,21 @@
+/* Mobile-First Layer Control Styles */
 .layer-control {
-  padding: 20px;
+  padding: 16px;
   background: white;
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  min-height: 0;
 }
 
 .control-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin: 0 0 16px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 20px 0;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
 }
 
 .layer-toggles {
@@ -21,9 +29,10 @@
   background: #f9f9f9;
   border-radius: 8px;
   transition: background 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.layer-toggle-item:hover {
+.layer-toggle-item:active {
   background: #f0f0f0;
 }
 
@@ -32,8 +41,12 @@
   align-items: center;
   gap: 12px;
   cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .toggle-label input[type="checkbox"] {
@@ -43,6 +56,7 @@
   height: 0;
 }
 
+/* Toggle Switch */
 .toggle-slider {
   position: relative;
   width: 44px;
@@ -63,6 +77,7 @@
   top: 3px;
   left: 3px;
   transition: transform 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .toggle-label input:checked + .toggle-slider {
@@ -76,15 +91,18 @@
 .toggle-text {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
   flex: 1;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
 }
 
 .toggle-icon {
-  font-size: 18px;
+  font-size: 20px;
+  flex-shrink: 0;
 }
 
 .control-info {
@@ -94,23 +112,35 @@
 }
 
 .control-info p {
-  font-size: 12px;
-  color: #666;
+  font-size: 13px;
+  color: #6b7280;
   margin: 0;
   text-align: center;
+  font-weight: 500;
+  line-height: 1.5;
+  font-family: 'Inter', sans-serif;
 }
 
-@media (max-width: 768px) {
+/* Desktop Styles */
+@media (min-width: 768px) {
   .layer-control {
+    padding: 20px;
+  }
+
+  .control-title {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .layer-toggle-item {
     padding: 12px;
   }
-  
-  .layer-toggle-item {
-    padding: 8px;
+
+  .layer-toggle-item:hover {
+    background: #f0f0f0;
   }
-  
+
   .toggle-text {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
-
