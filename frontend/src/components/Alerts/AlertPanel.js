@@ -74,18 +74,27 @@ function AlertPanel({ alerts }) {
       <div className="recommendations-section">
         <h3>Recommended Actions</h3>
         <ul className="recommendations-list">
-          <li className="recommendation-item">
-            <span className="rec-icon">✓</span>
-            <span>Monitor air quality updates every 1-2 hours</span>
-          </li>
-          <li className="recommendation-item">
-            <span className="rec-icon">✓</span>
-            <span>Close windows and prepare indoor filtration</span>
-          </li>
-          <li className="recommendation-item">
-            <span className="rec-icon">✓</span>
-            <span>Plan alternative activities for sensitive groups</span>
-          </li>
+          {alerts.recommendations?.map((rec, index) => (
+            <li key={index} className="recommendation-item">
+              <span className="rec-icon">✓</span>
+              <span>{rec}</span>
+            </li>
+          )) || (
+            <>
+              <li className="recommendation-item">
+                <span className="rec-icon">✓</span>
+                <span>Monitor air quality updates</span>
+              </li>
+              <li className="recommendation-item">
+                <span className="rec-icon">✓</span>
+                <span>Stay indoors if air quality worsens</span>
+              </li>
+              <li className="recommendation-item">
+                <span className="rec-icon">✓</span>
+                <span>Close windows and doors</span>
+              </li>
+            </>
+          )}
         </ul>
       </div>
 
