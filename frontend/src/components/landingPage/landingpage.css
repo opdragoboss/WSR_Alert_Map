@@ -94,7 +94,7 @@ body {
 }
 
 .hero-title {
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(2.5rem, 7vw, 5rem);
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 24px;
@@ -222,6 +222,8 @@ body {
 }
 
 .stat-card {
+  display: flex;
+  flex-direction: column;
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -530,10 +532,11 @@ body {
 
 .tech-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 24px;
-  max-width: 900px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  max-width: 1000px;
   margin: 0 auto;
+  justify-items: center;
 }
 
 .tech-item {
@@ -544,6 +547,29 @@ body {
   border-radius: 16px;
   text-align: center;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 180px;
+}
+
+.tech-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.tech-logo-text {
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 .tech-item:hover {
@@ -551,6 +577,7 @@ body {
   border-color: rgba(255, 107, 53, 0.5);
   transform: translateY(-4px);
 }
+
 
 .tech-name {
   font-weight: 600;
@@ -573,16 +600,21 @@ body {
 }
 
 .team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 48px;
-  max-width: 1100px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 24px;
+  max-width: 1200px;
   margin: 0 auto;
+  flex-wrap: wrap;
 }
 
 .team-member {
   text-align: center;
   transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .team-member:hover {
@@ -595,10 +627,20 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid rgba(255, 107, 53, 0.3);
-  margin: 0 auto 24px;
+  margin-bottom: 24px;
   display: block;
   background: #0a0a0a;
   transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.team-member h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.team-member .team-role {
+  margin-top: 0;
 }
 
 .team-member:hover .team-photo {
@@ -693,6 +735,10 @@ body {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+  }
+
   .hero {
     min-height: auto;
     padding: 80px 0;
@@ -701,9 +747,7 @@ body {
   .problem-section,
   .features-section,
   .how-it-works,
-  .demo-preview,
-  .tech-stack,
-  .team-section {
+  .tech-stack {
     padding: 80px 20px;
   }
 

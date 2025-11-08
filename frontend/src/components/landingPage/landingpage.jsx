@@ -16,10 +16,10 @@ function EmberCanvas() {
     const embers = Array.from({ length: 150 }).map(() => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      r: Math.random() * 2 + 0.5,
+      r: Math.random() * 3 + 1.5,
       vx: (Math.random() - 0.5) * 0.5,
       vy: -Math.random() * 0.7 - 0.2,
-      a: Math.random() * 0.6 + 0.4,
+      a: Math.random() * 0.8 + 0.6,
     }));
 
     const draw = () => {
@@ -80,7 +80,7 @@ function Landing() {
           <h1 className="hero-title">
             Get Wildfire Alerts
             <br />
-            <span className="highlight">Before It's Too Late</span>
+            <span className="highlight">Before its too late</span>
           </h1>
           
           <p className="hero-subtitle">
@@ -110,11 +110,11 @@ function Landing() {
           <div className="problem-grid">
             <div className="stat-card">
               <div className="stat-number">85%</div>
-              <p>of residents receive evacuation notices too late</p>
+              <p>of residents receive notices too late</p>
             </div>
             <div className="stat-card">
               <div className="stat-number">2-4 hrs</div>
-              <p>average delay between detection and alerts</p>
+              <p>delay between detection and alerts</p>
             </div>
             <div className="stat-card">
               <div className="stat-number">1000+</div>
@@ -123,8 +123,7 @@ function Landing() {
           </div>
           
           <p className="problem-text">
-            California residents often get alerts when it's already time to evacuate.
-            <strong> We give you hours, not minutes.</strong>
+            California residents often get alerts when it's already time to evacuate. <strong>We give you hours, not minutes.</strong>
           </p>
         </div>
       </section>
@@ -158,6 +157,18 @@ function Landing() {
               <div className="feature-icon">⚡</div>
               <h3>Instant Updates</h3>
               <p>Live data feed from NASA's satellite network refreshed continuously</p>
+            </div>
+            
+            <div className="feature-card">
+              <div className="feature-icon">🌡️</div>
+              <h3>Weather Integration</h3>
+              <p>Real-time weather data including wind speed and direction for fire spread prediction</p>
+            </div>
+            
+            <div className="feature-card">
+              <div className="feature-icon">📊</div>
+              <h3>Historical Data</h3>
+              <p>Access historical wildfire data and trends to better understand fire patterns</p>
             </div>
           </div>
         </div>
@@ -194,30 +205,6 @@ function Landing() {
         </div>
       </section>
 
-      {/* Demo Preview */}
-      <section className="demo-preview">
-        <div className="container">
-          <h2 className="section-title">See It In Action</h2>
-          <p className="section-subtitle">
-            Interactive map with real-time wildfire tracking and air quality monitoring
-          </p>
-          
-          <div className="demo-container">
-            <img 
-              src="/demo-screenshot-1200x800.png" 
-              alt="WildAlert Demo"
-              className="demo-image"
-            />
-            <div className="demo-overlay">
-              <button className="demo-play-btn" onClick={handleEnterApp}>
-                <span className="play-icon">▶</span>
-                Launch App
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Tech Stack */}
       <section className="tech-stack">
         <div className="container">
@@ -226,53 +213,36 @@ function Landing() {
           
           <div className="tech-grid">
             <div className="tech-item">
+              <div className="tech-logo-text">JS</div>
+              <div className="tech-name">JavaScript</div>
+            </div>
+            <div className="tech-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original-wordmark.svg" alt="React" className="tech-logo" />
               <div className="tech-name">React</div>
             </div>
             <div className="tech-item">
-              <div className="tech-name">NASA FIRMS</div>
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original-wordmark.svg" alt="Node.js" className="tech-logo" />
+              <div className="tech-name">Node.js</div>
             </div>
             <div className="tech-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original-wordmark.svg" alt="Express" className="tech-logo" />
+              <div className="tech-name">Express</div>
+            </div>
+            <div className="tech-item">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original-wordmark.svg" alt="Tailwind CSS" className="tech-logo" />
+              <div className="tech-name">Tailwind CSS</div>
+            </div>
+            <div className="tech-item">
+              <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/leaflet.svg" alt="Leaflet" className="tech-logo" />
               <div className="tech-name">Leaflet</div>
             </div>
             <div className="tech-item">
+              <div className="tech-logo-text">🌤️</div>
               <div className="tech-name">OpenWeather</div>
             </div>
             <div className="tech-item">
-              <div className="tech-name">Vite</div>
-            </div>
-            <div className="tech-item">
-              <div className="tech-name">Node.js</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="team-section">
-        <div className="container">
-          <h2 className="section-title">The Team</h2>
-          <p className="team-subtitle">Built at [Hackathon Name] 2025</p>
-          
-          <div className="team-grid">
-            <div className="team-member">
-              <img src="/team/person1-400x400.png" alt="Team Member 1" className="team-photo" />
-              <h3>Team Member 1</h3>
-              <p className="team-role">Role Title</p>
-            </div>
-            <div className="team-member">
-              <img src="/team/person2-400x400.png" alt="Team Member 2" className="team-photo" />
-              <h3>Team Member 2</h3>
-              <p className="team-role">Role Title</p>
-            </div>
-            <div className="team-member">
-              <img src="/team/person3-400x400.png" alt="Team Member 3" className="team-photo" />
-              <h3>Team Member 3</h3>
-              <p className="team-role">Role Title</p>
-            </div>
-            <div className="team-member">
-              <img src="/team/person4-400x400.png" alt="Team Member 4" className="team-photo" />
-              <h3>Team Member 4</h3>
-              <p className="team-role">Role Title</p>
+              <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/nasa.svg" alt="NASA EONET" className="tech-logo" />
+              <div className="tech-name">NASA EONET</div>
             </div>
           </div>
         </div>
@@ -296,17 +266,17 @@ function Landing() {
             </div>
             
             <div className="footer-section">
-              <h4>Data Sources</h4>
+              <h4>Data Source</h4>
               <ul>
-                <li><a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noopener noreferrer">NASA FIRMS</a></li>
-                <li><a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a></li>
+                <li><a href="https://eonet.gsfc.nasa.gov/api/v3" target="_blank" rel="noopener noreferrer">EONET by NASA</a></li>
               </ul>
             </div>
           </div>
           
           <div className="footer-bottom">
-            <p>&copy; 2025 WildAlert Team. Built for public good.</p>
+            <p>&copy; 2025 UN x UCSC Hackathon Team. Built for public good.</p>
             <p className="disclaimer">
+              This app is a work in progress and is not yet ready for production.
               This tool provides information based on NASA satellite data. 
               Always follow official emergency services guidance during wildfires.
             </p>
