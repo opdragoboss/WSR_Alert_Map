@@ -49,6 +49,10 @@ function MapView({ data, layers, loading, error, wind }) {
           <span role="img" aria-label="wildfire" className="legend-icon">🔥</span>
           <span>Active Wildfire</span>
         </div>
+        <div className="legend-item">
+          <span role="img" aria-label="nasa disaster" className="legend-icon">🛰️</span>
+          <span>NASA Tracked Event</span>
+        </div>
       </div>
     </div>
   );

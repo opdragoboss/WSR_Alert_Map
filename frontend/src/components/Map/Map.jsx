@@ -5,6 +5,7 @@ import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import { useDisasters } from '../../context/DisasterContext';
 
 // Ensure Leaflet marker assets load correctly in bundlers
 delete L.Icon.Default.prototype._getIconUrl;
@@ -17,8 +18,24 @@ L.Icon.Default.mergeOptions({
 const DEFAULT_CENTER = [37.7749, -122.4194];
 const DEFAULT_ZOOM = 6;
 
+const disasterIconMap = {
+  Wildfires: '🔥',
+  'Severe Storms': '🌩️',
+  Volcanoes: '🌋',
+  Earthquakes: '🌎'
+};
+
+const buildDisasterIcon = (category) =>
+  L.divIcon({
+    html: `<div style="font-size:22px">${disasterIconMap[category] || '⚠️'}</div>`,
+    className: 'nasa-disaster-icon',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+  });
+
 function Map({ data = {}, layers = {} }) {
   const { wildfires = [], airQuality = [] } = data;
+  const { disasters = [], userLocation } = useDisasters();
   const getAQColor = (status = '') => {
     const normalized = status.toLowerCase();
     if (normalized.includes('good')) return '#00E400';
@@ -29,13 +46,16 @@ function Map({ data = {}, layers = {} }) {
   };
 
   const center = useMemo(() => {
+    if (userLocation) {
+      return [userLocation.lat, userLocation.lon];
+    }
     if (wildfires.length) {
       const latSum = wildfires.reduce((sum, fire) => sum + (fire.lat || 0), 0);
       const lngSum = wildfires.reduce((sum, fire) => sum + (fire.lng || 0), 0);
       return [latSum / wildfires.length, lngSum / wildfires.length];
     }
     return DEFAULT_CENTER;
-  }, [wildfires]);
+  }, [userLocation, wildfires]);
 
   return (
     <MapContainer
@@ -92,6 +112,39 @@ function Map({ data = {}, layers = {} }) {
             </Popup>
           </CircleMarker>
         ))}
+
+      {layers.disasters &&
+        disasters.map((event) => {
+          if (!event.coordinates) return null;
+          const { lat, lon } = event.coordinates;
+          return (
+            <Marker
+              key={event.id}
+              position={[lat, lon]}
+              icon={buildDisasterIcon(event.category)}
+            >
+              <Popup>
+                <strong>{event.title}</strong>
+                <br />
+                <em>{event.category}</em>
+                <br />
+                {event.date && <span>Updated: {new Date(event.date).toLocaleString()}</span>}
+              </Popup>
+            </Marker>
+          );
+        })}
+
+      {layers.disasters && userLocation && (
+        <CircleMarker
+          center={[userLocation.lat, userLocation.lon]}
+          radius={10}
+          color="#2563eb"
+          fillColor="#2563eb"
+          fillOpacity={0.6}
+        >
+          <Popup>Your location</Popup>
+        </CircleMarker>
+      )}
     </MapContainer>
   );
 }

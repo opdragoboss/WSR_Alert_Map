@@ -51,6 +51,21 @@ function LayerControl({ layers, onToggle }) {
             </span>
           </label>
         </div>
+
+        <div className="layer-toggle-item">
+          <label className="toggle-label">
+            <input
+              type="checkbox"
+              checked={layers.disasters}
+              onChange={() => onToggle('disasters')}
+            />
+            <span className="toggle-slider"></span>
+            <span className="toggle-text">
+              <span className="toggle-icon">🛰️</span>
+              NASA Disasters
+            </span>
+          </label>
+        </div>
       </div>
 
       <div className="control-info">

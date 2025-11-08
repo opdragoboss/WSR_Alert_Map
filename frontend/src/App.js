@@ -7,6 +7,8 @@ import AlertPanel from './components/Alerts/AlertPanel';
 import LayerControl from './components/Layers/LayerControl';
 import { fetchWildfires, fetchAirQuality, fetchWindData } from './services/api';
 import { deriveAlertSummary } from './utils/alerts';
+import { DisasterProvider } from './context/DisasterContext';
+import Chatbot from './components/Chatbot/Chatbot';
 
 const DEFAULT_LOCATION = { lat: 37.7749, lng: -122.4194 };
 const DEFAULT_RADIUS = 50000;
@@ -26,7 +28,8 @@ function App() {
   const [layers, setLayers] = useState({
     wildfires: true,
     airQuality: true,
-    smokeForecast: false
+    smokeForecast: false,
+    disasters: true
   });
 
   useEffect(() => {
@@ -66,24 +69,29 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Header />
+    <DisasterProvider>
+      <div className="App">
+        <Header />
 
-      <div className="main-content">
-        <aside className="sidebar">
-          <Dashboard data={data} wind={wind} />
-          <LayerControl layers={layers} onToggle={toggleLayer} />
-        </aside>
+        <div className="main-content">
+          <aside className="sidebar">
+            <Dashboard data={data} wind={wind} />
+            <LayerControl layers={layers} onToggle={toggleLayer} />
+          </aside>
 
-        <main className="map-container">
-          <MapView data={data} layers={layers} loading={loading} error={error} wind={wind} />
-        </main>
+          <main className="map-container">
+            <MapView data={data} layers={layers} loading={loading} error={error} wind={wind} />
+          </main>
 
-        <aside className="alert-sidebar">
-          <AlertPanel alerts={data.alerts} />
-        </aside>
+          <aside className="alert-sidebar">
+            <AlertPanel alerts={data.alerts} />
+            <div style={{ marginTop: '24px' }}>
+              <Chatbot />
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
+    </DisasterProvider>
   );
 }
 
