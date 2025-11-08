@@ -17,7 +17,8 @@ export const fetchWildfires = async (options = {}) => {
     const response = await axios.get(`${API_BASE}/wildfires`, {
       params: options
     });
-    return response.data.data || [];
+    const data = response.data.data || [];
+    return data.length ? data : getMockWildfires();
   } catch (error) {
     console.error('Error fetching wildfires:', error);
     return getMockWildfires();
@@ -116,20 +117,24 @@ function getMockWildfires() {
   return [
     {
       id: 'fire_001',
+      name: 'Mock Fire - San Francisco',
       lat: 37.7749,
       lng: -122.4194,
       brightness: 330.5,
       confidence: 95,
       frp: 45.2,
+      severity: 'high',
       timestamp: new Date().toISOString()
     },
     {
       id: 'fire_002',
-      lat: 38.5816,
-      lng: -121.4944,
-      brightness: 315.8,
-      confidence: 88,
-      frp: 38.7,
+      name: 'Mock Fire - San Jose',
+      lat: 37.3382,
+      lng: -121.8863,
+      brightness: 318.2,
+      confidence: 90,
+      frp: 41.4,
+      severity: 'medium',
       timestamp: new Date().toISOString()
     }
   ];

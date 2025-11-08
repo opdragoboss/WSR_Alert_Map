@@ -1,21 +1,28 @@
 import React from 'react';
 import './Header.css';
 
-function Header() {
+function Header({ onLayersClick }) {
   return (
-    <header className="header">
+    <header className="header mobile-header">
       <div className="header-content">
         <div className="logo-section">
           <span className="logo-icon">🔥</span>
-          <h1 className="title">Wildfire Smoke Risk Alert Map</h1>
+          <div className="title-group">
+            <h1 className="title">Wildfire Alert</h1>
+            <div className="subtitle">Air Quality & Smoke</div>
+          </div>
         </div>
-        <div className="subtitle">
-          Real-Time Air Quality & Smoke Prediction
-        </div>
+
+        <button
+          className="header-button layers-button"
+          onClick={onLayersClick}
+          aria-label="Layers"
+        >
+          <span>⚙️</span>
+        </button>
       </div>
     </header>
   );
 }
 
 export default Header;
-

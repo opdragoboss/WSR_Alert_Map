@@ -14,7 +14,6 @@ const CATEGORY_MAP = {
 };
 
 const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
-const WILDFIRE_CATEGORY = 'Wildfires';
 
 export async function getAllActiveDisasters() {
   try {
@@ -26,9 +25,9 @@ export async function getAllActiveDisasters() {
     return data.events
       .map((event) => {
         const coordinates = getEventCoordinates(event);
-        const mostRecentDate = event.geometry?.[event.geometry.length - 1]?.date;
+        const date = event.geometry?.[event.geometry.length - 1]?.date;
         const categoryTitle = event.categories?.[0]?.title || 'Unknown';
-        if (!coordinates || categoryTitle !== WILDFIRE_CATEGORY || !isWithinLastWeek(mostRecentDate)) {
+        if (!coordinates || categoryTitle !== 'Wildfires' || !isWithinLastWeek(date)) {
           return null;
         }
         return {
@@ -36,7 +35,7 @@ export async function getAllActiveDisasters() {
           title: event.title,
           category: categoryTitle,
           coordinates,
-          date: mostRecentDate
+          date
         };
       })
       .filter(Boolean);
@@ -59,11 +58,8 @@ export async function getDisastersByType(category, lat, lon, radiusMiles = 50) {
     return data.events
       .map((event) => {
         const coordinates = getEventCoordinates(event);
-        if (!coordinates || lat == null || lon == null) {
-          return null;
-        }
-        const mostRecentDate = event.geometry?.[event.geometry.length - 1]?.date;
-        if (!isWithinLastWeek(mostRecentDate)) {
+        const date = event.geometry?.[event.geometry.length - 1]?.date;
+        if (!coordinates || !isWithinLastWeek(date) || lat == null || lon == null) {
           return null;
         }
         const distance = calculateDistance(lat, lon, coordinates.lat, coordinates.lon);
@@ -72,7 +68,7 @@ export async function getDisastersByType(category, lat, lon, radiusMiles = 50) {
           title: event.title,
           category: event.categories?.[0]?.title || 'Unknown',
           coordinates,
-          date: mostRecentDate,
+          date,
           distance
         };
       })
@@ -80,6 +76,27 @@ export async function getDisastersByType(category, lat, lon, radiusMiles = 50) {
       .sort((a, b) => a.distance - b.distance);
   } catch (error) {
     console.error('Error fetching NASA disasters by type:', error);
+    return [];
+  }
+}
+
+export async function getNearbyDisasters(lat, lon, radiusMiles = 50) {
+  try {
+    const response = await fetch(`${NASA_EONET_API}/events`);
+    if (!response.ok) {
+      throw new Error(`NASA EONET error: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.events
+      .map((event) => {
+        const coords = getEventCoordinates(event);
+        if (!coords) return null;
+        const distance = calculateDistance(lat, lon, coords.lat, coords.lon);
+        return { ...event, coordinates: coords, distance };
+      })
+      .filter((event) => event && event.distance <= radiusMiles);
+  } catch (error) {
+    console.error('NASA API error:', error);
     return [];
   }
 }
@@ -107,16 +124,19 @@ function getEventCoordinates(event) {
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
   const R = 3959;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    Math.cos(toRadians(lat1)) *
+      Math.cos(toRadians(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
 
-function toRad(degrees) {
+function toRadians(degrees) {
   return degrees * (Math.PI / 180);
 }
 
@@ -126,4 +146,3 @@ function isWithinLastWeek(dateString) {
   if (Number.isNaN(eventDate.getTime())) return false;
   return Date.now() - eventDate.getTime() <= ONE_WEEK_MS;
 }
-

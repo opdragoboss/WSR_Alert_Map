@@ -25,6 +25,26 @@ const disasterIconMap = {
   Earthquakes: '🌎'
 };
 
+const fireMarkerIcon = L.divIcon({
+  html: `<div style="
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255, 240, 200, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        line-height: 1;
+        border: 2px solid #ff6b6b;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      ">🔥</div>`,
+  className: '',
+  iconSize: [38, 38],
+  iconAnchor: [19, 32],
+  popupAnchor: [0, -28]
+});
+
 const buildDisasterIcon = (category) =>
   L.divIcon({
     html: `<div style="font-size:22px">${disasterIconMap[category] || '⚠️'}</div>`,
@@ -71,9 +91,9 @@ function Map({ data = {}, layers = {} }) {
 
       {layers.wildfires &&
         wildfires.map((fire) => (
-          <Marker key={fire.id} position={[fire.lat, fire.lng]}>
+          <Marker key={fire.id} position={[fire.lat, fire.lng]} icon={fireMarkerIcon}>
             <Popup>
-              <strong>{fire.name || 'Active Fire'}</strong>
+              <strong>{fire.name || '🔥 Active Fire'}</strong>
               <br />
               {fire.confidence != null && (
                 <>

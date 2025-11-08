@@ -1,7 +1,7 @@
 import React from 'react';
 import './AlertPanel.css';
 
-const riskLabels = {
+const RISK_LABELS = {
   low: 'Low',
   moderate: 'Moderate',
   high: 'High',
@@ -9,10 +9,14 @@ const riskLabels = {
   extreme: 'Extreme'
 };
 
-function AlertPanel({ alerts }) {
-  const hasAlerts = Boolean(alerts);
+const DEFAULT_RECOMMENDATIONS = [
+  'Monitor air quality updates every 1-2 hours',
+  'Keep indoor air clean with filters or purifiers',
+  'Plan alternative activities for sensitive groups'
+];
 
-  if (!hasAlerts) {
+function AlertPanel({ alerts }) {
+  if (!alerts) {
     return (
       <div className="alert-panel">
         <h2 className="panel-title">⚠️ Alerts</h2>
@@ -23,25 +27,37 @@ function AlertPanel({ alerts }) {
     );
   }
 
-  const level = alerts.level || 'low';
-  const badgeClass = `summary-badge risk-${level}`;
-  const riskText = (riskLabels[level] || level).toUpperCase();
+  const riskLevel = (alerts.level || 'moderate').toLowerCase();
+  const badgeClass = `summary-badge risk-${riskLevel}`;
+  const riskText = (RISK_LABELS[riskLevel] || riskLevel).toUpperCase();
+  const messages = alerts.messages && alerts.messages.length ? alerts.messages : ['Monitoring conditions in your area.'];
+  const recommendations =
+    alerts.recommendations && alerts.recommendations.length
+      ? alerts.recommendations
+      : riskLevel === 'high'
+      ? [
+          'Prepare for potential evacuation',
+          'Pack essential documents and medications',
+          'Check on neighbors and vulnerable family members',
+          'Monitor official channels for evacuation guidance'
+        ]
+      : DEFAULT_RECOMMENDATIONS;
 
   return (
     <div className="alert-panel">
       <h2 className="panel-title">⚠️ Alerts</h2>
-      
+
       <div className="alert-summary">
-        <div className={badgeClass}>
-          {riskText} RISK
-        </div>
-        <p className="summary-text">Live smoke & air quality assessment</p>
+        <div className={badgeClass}>{riskText} RISK</div>
+        <p className="summary-text">
+          Real-time smoke and air quality assessment based on the latest satellite and ground sensors.
+        </p>
       </div>
 
       <div className="alerts-section">
         <h3>Priority Messages</h3>
-        {alerts.messages?.map((message, index) => (
-          <div key={index} className="alert-card severity-alert">
+        {messages.map((message, index) => (
+          <div key={index} className="alert-card">
             <div className="alert-header">
               <span className="alert-icon">⚠️</span>
               <span className="alert-title">Update {index + 1}</span>
@@ -74,27 +90,18 @@ function AlertPanel({ alerts }) {
       <div className="recommendations-section">
         <h3>Recommended Actions</h3>
         <ul className="recommendations-list">
-          <li className="recommendation-item">
-            <span className="rec-icon">✓</span>
-            <span>Monitor air quality updates every 1-2 hours</span>
-          </li>
-          <li className="recommendation-item">
-            <span className="rec-icon">✓</span>
-            <span>Close windows and prepare indoor filtration</span>
-          </li>
-          <li className="recommendation-item">
-            <span className="rec-icon">✓</span>
-            <span>Plan alternative activities for sensitive groups</span>
-          </li>
+          {recommendations.map((rec, index) => (
+            <li key={index} className="recommendation-item">
+              <span className="rec-icon">✓</span>
+              <span>{rec}</span>
+            </li>
+          ))}
         </ul>
       </div>
 
-      <div className="update-timestamp">
-        Last updated: {new Date().toLocaleString()}
-      </div>
+      <div className="update-timestamp">Last updated: {new Date().toLocaleTimeString()}</div>
     </div>
   );
 }
 
 export default AlertPanel;
-
